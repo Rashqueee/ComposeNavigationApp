@@ -30,7 +30,7 @@ fun SplashScreen(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Compose Navigation App",
+                text = "xXxKoTliNxXx",
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
             )
             Spacer(Modifier.height(16.dp))
