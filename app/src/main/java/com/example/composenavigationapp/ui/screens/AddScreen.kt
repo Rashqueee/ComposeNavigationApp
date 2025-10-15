@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import com.example.composenavigationapp.ui.viewmodel.ItemViewModel
 
 @Composable
-fun AddScreen(navController: NavController, viewModel: ItemViewModel = viewModel()) {
+fun AddScreen(navController: NavController, viewModel: ItemViewModel) {
     var id by remember { mutableStateOf("") }
     var title by remember { mutableStateOf("") }
 

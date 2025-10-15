@@ -21,7 +21,7 @@ import com.example.composenavigationapp.ui.navigation.Routes
 import com.example.composenavigationapp.ui.viewmodel.ItemViewModel
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: ItemViewModel = viewModel()){
+fun HomeScreen(navController: NavController, viewModel: ItemViewModel){
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

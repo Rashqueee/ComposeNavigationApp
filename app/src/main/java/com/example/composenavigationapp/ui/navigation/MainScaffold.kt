@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,6 +22,7 @@ import com.example.composenavigationapp.ui.screens.EditScreen
 import com.example.composenavigationapp.ui.screens.HomeScreen
 import com.example.composenavigationapp.ui.screens.ProfileScreen
 import com.example.composenavigationapp.ui.screens.SettingsScreen
+import com.example.composenavigationapp.ui.viewmodel.ItemViewModel
 import kotlinx.coroutines.launch
 
 // --- BottomNav items ---
@@ -174,31 +176,25 @@ private fun MainNavHost(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit
 ) {
+    val viewModel: ItemViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Routes.HOME
     ) {
-        composable(Routes.HOME) {
-            HomeScreen(navController)
-        }
+        composable(Routes.HOME) { HomeScreen(navController, viewModel) }
         composable("${Routes.DETAIL}/{id}") { backStack ->
             val id = backStack.arguments?.getString("id")
             DetailScreen(navController, id)
         }
-        composable(Routes.PROFILE) {
-            ProfileScreen()
-        }
+        composable(Routes.PROFILE) { ProfileScreen() }
         composable(Routes.SETTINGS) {
             SettingsScreen(
                 isDarkTheme = isDarkTheme,
                 onToggleTheme = onToggleTheme
             )
         }
-        composable(Routes.ADD) {
-            AddScreen(navController)
-        }
-        composable(Routes.EDIT) {
-            EditScreen(navController)
-        }
+        composable(Routes.EDIT) { EditScreen(navController) }
+        composable(Routes.ADD) { AddScreen(navController, viewModel) }
     }
 }
