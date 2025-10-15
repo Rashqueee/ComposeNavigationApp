@@ -11,27 +11,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.composenavigationapp.ui.navigation.Routes
+import com.example.composenavigationapp.ui.viewmodel.ItemViewModel
 
 @Composable
-fun HomeScreen(navController: NavController){
-    val items = remember {
-        listOf(
-            "A01" to "Judul Item 1",
-            "A02" to "Judul Item 2",
-            "A03" to "Judul Item 3",
-            "A04" to "Judul Item 4",
-            "A05" to "Judul Item 5",
-        )
-    }
+fun HomeScreen(navController: NavController, viewModel: ItemViewModel = viewModel()){
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(items, key = { it.first }) { (id, title) ->
+        items(viewModel.items, key = { it.first }) { (id, title) ->
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 modifier = Modifier
