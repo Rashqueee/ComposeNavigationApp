@@ -40,63 +40,6 @@ private val bottomItems = listOf(
     BottomItem.Settings
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScaffold() {
-    val navController = rememberNavController()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            AppDrawer(
-                onNavigate = { route ->
-                    // Navigasi via Drawer
-                    navController.navigate(route) {
-                        // popUpTo start agar tidak menumpuk
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                    scope.launch { drawerState.close() }
-                }
-            )
-        }
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        val current = currentRoute(navController)
-                        Text(current ?: "Compose App")
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Filled.Home, contentDescription = "Menu")
-                        }
-                    }
-                )
-            },
-            bottomBar = { BottomNavBar(navController) },
-            floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    // FAB menuju layar ADD
-                    navController.navigate(Routes.ADD) { launchSingleTop = true }
-                }) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add")
-                }
-            }
-        ) { padding ->
-            Box(Modifier.padding(padding)) {
-                MainNavHost(navController)
-            }
-        }
-    }
-}
-
 @Composable
 private fun BottomNavBar(navController: NavHostController) {
     val backStack by navController.currentBackStackEntryAsState()
@@ -159,8 +102,78 @@ private fun AppDrawer(onNavigate: (String) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainNavHost(navController: NavHostController) {
+fun MainScaffold(
+    isDarkTheme: Boolean,
+    onToggleTheme: () -> Unit
+) {
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            AppDrawer(
+                onNavigate = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    scope.launch { drawerState.close() }
+                }
+            )
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        val currentRoute = currentRoute(navController)
+                        val title = when (currentRoute) {
+                            Routes.HOME -> "Home"
+                            Routes.PROFILE -> "Profile"
+                            Routes.SETTINGS -> "Settings"
+                            Routes.ADD -> "Add Item"
+                            Routes.DETAIL -> "Detail"
+                            else -> "Compose App"
+                        }
+                        Text(title)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Filled.Home, contentDescription = "Menu")
+                        }
+                    }
+                )
+
+            },
+            bottomBar = { BottomNavBar(navController) },
+            floatingActionButton = {
+                FloatingActionButton(onClick = {
+                    navController.navigate(Routes.ADD) { launchSingleTop = true }
+                }) {
+                    Icon(Icons.Filled.Add, contentDescription = "Add")
+                }
+            }
+        ) { padding ->
+            Box(Modifier.padding(padding)) {
+                MainNavHost(navController, isDarkTheme, onToggleTheme)
+            }
+        }
+    }
+}
+
+@Composable
+private fun MainNavHost(
+    navController: NavHostController,
+    isDarkTheme: Boolean,
+    onToggleTheme: () -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = Routes.HOME
@@ -176,7 +189,10 @@ private fun MainNavHost(navController: NavHostController) {
             ProfileScreen()
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen()
+            SettingsScreen(
+                isDarkTheme = isDarkTheme,
+                onToggleTheme = onToggleTheme
+            )
         }
         composable(Routes.ADD) {
             AddScreen(navController)
