@@ -1,42 +1,23 @@
 package com.example.composenavigationapp.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import com.example.composenavigationapp.ui.screens.AddScreen
 import com.example.composenavigationapp.ui.screens.DetailScreen
+import com.example.composenavigationapp.ui.screens.EditScreen
 import com.example.composenavigationapp.ui.screens.HomeScreen
 import com.example.composenavigationapp.ui.screens.ProfileScreen
 import com.example.composenavigationapp.ui.screens.SettingsScreen
@@ -197,18 +178,27 @@ private fun MainNavHost(
         navController = navController,
         startDestination = Routes.HOME
     ) {
-        composable(Routes.HOME) { HomeScreen(navController) }
+        composable(Routes.HOME) {
+            HomeScreen(navController)
+        }
         composable("${Routes.DETAIL}/{id}") { backStack ->
             val id = backStack.arguments?.getString("id")
             DetailScreen(navController, id)
         }
-        composable(Routes.PROFILE) { ProfileScreen() }
+        composable(Routes.PROFILE) {
+            ProfileScreen()
+        }
         composable(Routes.SETTINGS) {
             SettingsScreen(
                 isDarkTheme = isDarkTheme,
                 onToggleTheme = onToggleTheme
             )
         }
-        composable(Routes.ADD) { AddScreen(navController) }
+        composable(Routes.ADD) {
+            AddScreen(navController)
+        }
+        composable(Routes.EDIT) {
+            EditScreen(navController)
+        }
     }
 }

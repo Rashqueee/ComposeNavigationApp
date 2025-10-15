@@ -8,4 +8,5 @@ object Routes {
     const val SETTINGS = "settings"
     const val ADD = "add"
     const val MAIN_GRAPH = "main_graph"
+    const val EDIT = "edit"
 }
